@@ -1,6 +1,6 @@
 <template>
     <div>
-        login
+        404
     </div>
 </template>
 

@@ -6,10 +6,9 @@ import App from "./App.vue";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import "virtual:svg-icons-register";
 import gloablComponent from "./components/index";
-import { createPinia } from 'pinia'
 import router from '@/router'
+import pinia from "./store";
 
-const pinia = createPinia()
 const app = createApp(App);
 
 app.use(gloablComponent)

@@ -3,6 +3,9 @@ import vue from "@vitejs/plugin-vue";
 import path from "path";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import { viteMockServe } from "vite-plugin-mock";
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vite.dev/config/
 export default defineConfig(({ command }) => {
@@ -18,6 +21,12 @@ export default defineConfig(({ command }) => {
       viteMockServe({
         //@ts-ignore
         localEnabled: command === "serve",
+      }),
+      AutoImport({
+        resolvers: [ElementPlusResolver()],
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
       }),
     ],
     resolve: {
