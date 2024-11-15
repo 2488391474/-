@@ -1,0 +1,16 @@
+<template v-for="(route, key) in props.routes" :key="key">
+    <template v-if="!route.children">
+      <el-menu-item :index="route.path" :title="route.meta.title">{{
+        route.meta.title
+      }}</el-menu-item>
+    </template>
+    <template v-else>
+      <el-sub-menu :index="route.path">
+        <template #title>
+          <!-- <el-icon><location /></el-icon> -->
+          <span>{{ route.meta.title }}</span>
+        </template>
+        <Menu :routes="route.children"></Menu>
+      </el-sub-menu>
+    </template>
+  </template>

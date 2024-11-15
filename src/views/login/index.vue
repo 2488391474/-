@@ -5,12 +5,20 @@
         <div class="box_container">
           <h1>Vue3+Typescript后台管理界面</h1>
 
-          <el-form :model="loginForm">
-            <el-form-item label="账号">
-              <el-input v-model="loginForm.username" placeholder="username" />
+          <el-form :model="loginForm" :rules="rules" ref="loginFormRef">
+            <el-form-item label="账号" prop="username">
+              <el-input
+                v-model="loginForm.username"
+                placeholder="username"
+                :suffix-icon="Search"
+              />
             </el-form-item>
-            <el-form-item label="密码">
-              <el-input v-model="loginForm.password" placeholder="password" />
+            <el-form-item label="密码" prop="password">
+              <el-input
+                v-model="loginForm.password"
+                placeholder="password"
+                :suffix-icon="Search"
+              />
             </el-form-item>
 
             <el-button type="primary" @click="login">登录</el-button>
@@ -22,23 +30,54 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import type { loginForm } from "@/api/user/type";
 import useUserStore from "@/store/user";
 import { useRouter } from "vue-router";
-import { ElNotification } from "element-plus";
+import { ElNotification, FormInstance, FormRules } from "element-plus";
+import { Search } from "@element-plus/icons-vue";
+import getTime from "@/utils/gettime";
+
 let $router = useRouter();
 const userStore = useUserStore();
 
+const loginFormRef = ref<FormInstance>(null);
+
 let loginForm = reactive<loginForm>({ username: "admin", password: "111111" });
+
+//表单校验
+const rules: FormRules<loginForm> = {
+  username: [
+    {
+      required: true,
+      message: "长度必须在5-10",
+      trigger: "blur",
+      min: 5,
+      max: 10,
+    },
+  ],
+  password: [
+    {
+      required: true,
+      min: 6,
+      max: 10,
+      message: "长度应为6-15位",
+      trigger: "change",
+    },
+  ],
+};
 const login = async () => {
+  const valRes = await loginFormRef.value.validate();
+  console.log(valRes,'@@');
+  
+
   try {
     await userStore.login(loginForm);
     $router.push("/");
     ElNotification({
       type: "success",
       message: "登录成功",
-      title: "早上好",
+      title: getTime(),
     });
   } catch (err) {
     ElNotification({
@@ -47,7 +86,7 @@ const login = async () => {
     });
   }
 };
-console.log(userStore.userInfo, "index");
+onMounted(async () => {});
 </script>
 
 <style scoped lang="scss">
